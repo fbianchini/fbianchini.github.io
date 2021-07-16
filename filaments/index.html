@@ -1,0 +1,197 @@
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+  Cross-spectra bewteen lensing, compton-y, and filaments.
+  </title>
+
+  <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <!-- MathJax equation numbering -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+
+</head>
+
+  <body>
+<script type="text/javascript" src="scripts/pager.js"></script>
+<link rel="stylesheet" type="text/css" href="scripts/pager.css">
+
+  <div class="container content">
+
+      <main>
+        <article class="page">
+  <h1 id='top' class="page-title"> Cosmic filaments, the CMB perspective. </h1>
+  <p class="page-author"> F. Bianchini</p>
+  <p class="page-date"> 13 July 2021. </p>
+
+<h2>Outline and scope</h2>
+
+<p>
+This posting shows stuff.
+<i>missing-baryon problem></i>, the fact that CMB and Big Bang nucleosynthesis predict a larger baryonics energy density than observed so far in the local Universe.
+A possible explanation is that a large fraction (30 − 50%) of baryons can reside in a warm-hot intergalactic medium (WHIM) phase, with temperatures in
+the range $T_{\rm whim} = 10^{5−7}$ K, too warm to absorb efficiently and too cold to emit X-rays.
+</p>
+
+<hr>
+
+
+<hr>
+
+<h2>Filaments intensity maps</h2>
+<p>
+    Here I'm using a recently publicly released <a href="https://www.javiercarron.com/catalogue"> filaments catalogue</a> extracted from spectroscopic SDSS galaxy data (BOSS and eBOSS). 
+    The filaments are detected by applying a version of the Subspace-Constrained Mean Shift boosted with Machine Learning Techniques to thin slices of the redshift component in a tomographic
+    analysis (in a nutshell, filaments are found in each redshift bin as the density ridge of the smoothed galaxy density field).
+</p>
+<p>
+    The catalogue is divided into 3 blocks, depending on the data used:
+    <ul>
+    <li >Block 1: using BOSS (mainly LOWZ) data, with $0.05 < z < 0.45$. Only points in the LOWZ footprint are used, in both Galactic Hemispheres.</li>
+    <li> Block 2: using BOSS CMASS data, with redshift $0.45 < z < 0.7$, in both Galactic Hemispheres. </li>
+    <li>Block 3: using BOSS+eBOSS data (LRG and QSO), with redshift between $0.6 < z < 2.2$. Only points in the smaller eBOSS footprint are used, in the North Galactic Hemisphere only.</li>
+    </ul>
+</p>
+<p>
+    I follow <a href="https://export.arxiv.org/pdf/1709.02543v2"> He+18</a> and define the <i>filament intensity</i> as
+    $$
+    I(\hat{n}, z)=\frac{1}{\sqrt{2 \pi \rho_{f}(\hat{n}, z)^{2}}} \exp \left(-\frac{\left\|\hat{n}-\hat{\Pi}_{f}(\hat{n},z)\right\|^{2}}{2 \rho_{f}(\hat{n}, z)^{2}}\right),
+    $$
+    where $\hat{\Pi}_{f}(\hat{n},z)$ is the angular position of the closest point to $\hat{n}$ on the nearest filament and $\rho_{f}(\hat{n}, z)^{2}$ is the uncertainty of the filament at the projected position $\hat{\Pi}_{f}(\hat{n},z)$.
+</p>
+
+
+
+<figure>
+    <img alt="fils pager" id="fils_pager" src="#" />
+    <figcaption>
+        This pager shows the filaments intensity maps in each redshift slice ($\Delta z \approx 0.005$) in equatorial coordinates. Note that not
+         all of the samples have 166 slices, LOWZ has 78, CMASS has 40, and eBOSS has 166.   
+    </figcaption>
+    <script type="text/javascript">
+        pager.link("#fils_pager",
+            {
+                'Sample|sample': ['BOSS LOWZ|1','BOSS CMASS|2','BOSS+eBOSS (LRG and QSO)|3'],
+                'Redshift slice|z': ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80','81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','97','98','99','100','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','120','121','122','123','124','125','126','127','128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','161','162','163','164','165'],
+            },
+            function (params) {
+                return 'plots/fils_block' + params['sample'] + '_' + params['z'] + '.png';
+            });
+        pager.setparams({
+            'sample':'2',
+            'z': '0',
+        });
+    </script>
+</figure>
+
+<p>
+    With the intensity maps at each redshift bin, we can then construct the filament intensity overdensity map as
+    $$
+    \delta_{f}(\hat{n})=\frac{\int I(\hat{n}, z) d z-\bar{I}}{\bar{I}}, \quad \bar{I}=\frac{\int I(\hat{n}, z) d\Omega_{\hat{\imath}} d z}{\int d \Omega_{\hat{\imath}}}
+    $$.
+    We will use the overdensity map $\delta_{f}(\hat{n})$ to measure the cross-correlation with lensing and compton-$y$.
+
+    Mask + redmapper and uncertainties threshold
+</p>
+
+<h2>Cross-correlation with CMB lensing</h2>
+<p>
+    We start by cross-correlating the filament overdensity map with the (minimum-variance) CMB lensing map from <i>Planck</i>. 
+    Note that this is similar to what done in <a href="https://export.arxiv.org/pdf/1709.02543v2"> He+18</a>, although they used a different filaments catalogue (also based on spec-$z$ SDSS data) and the <i>Planck</i> 2015 CMB lensing map, so this will serve as a consistency check.
+</p>
+    <figure>
+    <img alt="kf pager" id="kf_pager" src="#" />
+    <figcaption>
+    Cross-power spectrum between Planck 2018 MV CMB lensing map and the filaments
+    </figcaption>
+        <script type="text/javascript">
+            pager.link("#kf_pager",
+                {
+                    'Plot type |ptype01' : ['Spectrum|clkf', 'Corr coeff|clkf_corr'],
+                    'Sample|sample01': ['BOSS LOWZ|1', 'BOSS CMASS|2', 'BOSS+eBOSS (LRG and QSO)|3'],
+                    'Filaments uncertainty threshold|unc01': ['70', '100'],
+                    'Mask|mask01' : ['base|base', 'base + SDSS redmapper clusts|base+redmapper5am'],
+                },
+                function(params) {
+                    return 'plots/' + params['ptype01'] + '_Block' + params['sample01'] + '_unc_' + params['unc01'] + '_mask_' + params['mask01'] +  '.png';
+
+                });
+                pager.setparams({
+                    'ptype01': 'clkf',
+                    'sample01': '2',
+                    'unc01':'70',
+                    'mask01': 'base',
+                });
+    </script>
+    </figure>
+
+<p>
+    These results can be qualitatively compared to the CMB lensing - filaments cross-power spectrum presented in He+18 and shown below.
+</p>
+
+<img src="plots/he18_clkf.png" alt="He18_clkf" >
+<hr>
+
+<h2>Cross-correlation with CMB Compton-$y$</h2>
+We start by cross-correlating the filament overdensity map 
+
+<figure>
+    <img alt="yf pager" id="yf_pager" src="#" />
+    <figcaption>
+    Cross-power spectrum between Planck Compton-y maps (NILC/MILCA) and the filaments
+    </figcaption>
+    <script type="text/javascript">
+        pager.link("#yf_pager",
+            {
+                'Plot type |ptype02': ['Spectrum|clyf', 'Corr coeff|clyf_corr', 'Null test|clynf'],
+                'Sample|sample02': ['BOSS LOWZ|1', 'BOSS CMASS|2', 'BOSS+eBOSS (LRG and QSO)|3'],
+                'Filaments uncertainty threshold|unc02': ['70', '100'],
+                'Mask|mask02': ['base|base', 'base + SDSS redmapper clusts|base+redmapper5am'],
+                'Y-map|ymap02': ['NILC|nilc', 'MILCA|milca'],
+            },
+            function (params) {
+                return 'plots/' + params['ptype02'] + '_Block' + params['sample02'] + '_unc_' + params['unc02'] + '_mask_' + params['mask02'] + '_ymap_' + params['ymap02']+ '.png';
+
+            });
+        pager.setparams({
+            'ptype02': 'clyf',
+            'sample02': '2',
+            'unc02': '70',
+            'mask02': 'base',
+            'ymap02': 'nilc',
+        });
+    </script>
+</figure>
+
+<hr>
+
+<h2>Conclusions</h2>
+
+This posting leads to conclusions.
+<ul>
+    <li> Develop framework to interpret the measurement</li>
+    <li> Include compton-$y$ map inhomogenous weighting</li>
+    <li> Null tests</li>
+</ul>
+
+<hr>
+
+</article>
+</main>
+</div>
+<script type="text/javascript">
+    plupdate();
+</script>
+</body>
+</html>
