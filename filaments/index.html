@@ -35,17 +35,23 @@
   <p class="page-author"> F. Bianchini</p>
   <p class="page-date"> 13 July 2021. </p>
 
-<h2>Outline and scope</h2>
+<h2>Context and scope</h2>
 
 <p>
-This posting shows stuff.
-<i>missing-baryon problem></i>, the fact that CMB and Big Bang nucleosynthesis predict a larger baryonics energy density than observed so far in the local Universe.
-A possible explanation is that a large fraction (30 − 50%) of baryons can reside in a warm-hot intergalactic medium (WHIM) phase, with temperatures in
-the range $T_{\rm whim} = 10^{5−7}$ K, too warm to absorb efficiently and too cold to emit X-rays.
+In this posting we will look at the imprint of cosmic filaments, the intricate web of structure formed by the matter distribution, on CMB lensing and Compton-$y$ maps, which probe the integrated matter and electronic pressure distribution out to high redshift.
+</p> 
+<p>
+One motivation behind this kind of analysis is the study of the <i>missing-baryon problem</i>, the fact that CMB and BBN data predict a larger baryonics energy density than observed so far in the local Universe.
+A possible explanation is that a large fraction (30 − 50%) of baryons reside in a warm-hot intergalactic medium (WHIM) phase, with temperatures in
+the range $T_{\rm whim} = 10^{5−7}$ K, too warm to absorb efficiently and too cold to emit X-rays. While CMB lensing-filaments cross-correlations can tell us about the filaments bias, i.e. how filaments trace the underlying
+matter distribution, the Compton-$y$ - filaments signal should depend in principle on the free baryon fraction.
 </p>
 
-<hr>
-
+<p>Two previous analyses have looked at the filamentary signal in compton-$y$ maps by stacking them at the location of (spec-$z$) galaxies, see <a href="https://arxiv.org/abs/1709.05024"> Tanimura+19</a> and <a href="https://arxiv.org/abs/1709.10378"> de
+     Graaff+19</a>. 
+In the harmonic domain, <a href="https://export.arxiv.org/pdf/1709.02543v2"> He+18</a> have measured the cross-correlation signal (cross-power spectrum) between filaments and CMB lensing convergence map. 
+Here we follow the second approach and apply it to <i>Planck</i> compton-$y$ maps.
+</p>
 
 <hr>
 
@@ -98,12 +104,31 @@ the range $T_{\rm whim} = 10^{5−7}$ K, too warm to absorb efficiently and too 
 <p>
     With the intensity maps at each redshift bin, we can then construct the filament intensity overdensity map as
     $$
-    \delta_{f}(\hat{n})=\frac{\int I(\hat{n}, z) d z-\bar{I}}{\bar{I}}, \quad \bar{I}=\frac{\int I(\hat{n}, z) d\Omega_{\hat{\imath}} d z}{\int d \Omega_{\hat{\imath}}}
-    $$.
+    \delta_{f}(\hat{n})=\frac{\int I(\hat{n}, z) d z-\bar{I}}{\bar{I}}, \quad \bar{I}=\frac{\int I(\hat{n}, z) d\Omega_{\hat{\imath}} d z}{\int d \Omega_{\hat{\imath}}}.
+    $$
     We will use the overdensity map $\delta_{f}(\hat{n})$ to measure the cross-correlation with lensing and compton-$y$.
-
-    Mask + redmapper and uncertainties threshold
 </p>
+
+<p>
+    In the following we will make use of two set of masks:
+    <ul>
+        <li>Baseline mask: defined by the combination of the SDSS filaments footprint and the Compton-$y$ and CMB lensing masks (Galactic masks + pt srcs)</li>
+        <li>Baseline mask + SDSS redMaPPer cluster: in order to test the impact of clusters at the intersection of filaments on our signal we combine the map above with one where we mask out SDSS redMaPPer clusters out to 5 arcmin </li>
+    </ul>
+
+    In addition, we will also measure the cross-correlation signals with filament maps constructed from catalogs that contain filaments at different reliability thresholds. 
+</p>
+
+<hr>
+
+<h2>Few notes about the analysis</h2>
+<ul>
+    <li>Power spectra are extracted using <code>NaMaster</code> (all fields involved are spin-0)</li>
+    <li>Maps are produced at an <code>HEALPix</code> resolution of <code>Nside=512</code></li>
+    <li>Gaussian approximation to estimate the covariance matrix (i.e. error bars)</li>
+</ul>
+
+<hr>
 
 <h2>Cross-correlation with CMB lensing</h2>
 <p>
@@ -137,14 +162,16 @@ the range $T_{\rm whim} = 10^{5−7}$ K, too warm to absorb efficiently and too 
     </figure>
 
 <p>
-    These results can be qualitatively compared to the CMB lensing - filaments cross-power spectrum presented in He+18 and shown below.
+    These results can be compared to the CMB lensing - filaments cross-power spectrum presented in He+18 and shown below. As we can see, they are in qualitative agreement.
 </p>
 
 <img src="plots/he18_clkf.png" alt="He18_clkf" >
 <hr>
 
 <h2>Cross-correlation with CMB Compton-$y$</h2>
-We start by cross-correlating the filament overdensity map 
+We now move on to correlate the filaments overdensity maps with the <i>Planck</i> <code>NILC/MILCA</code> compton-$y$ maps. 
+In addition to the $C_{\ell}^{yf}$ cross-spectra we will also perform a rudimentary null test where we correlate a half-difference $y$-map 
+constructed as $y^{-}=\frac{y^{\rm first}-y^{\rm last}}{2}$ with the filaments; this cross-spectrum is of course expected to be zero.
 
 <figure>
     <img alt="yf pager" id="yf_pager" src="#" />
@@ -176,14 +203,19 @@ We start by cross-correlating the filament overdensity map
 
 <hr>
 
-<h2>Conclusions</h2>
-
-This posting leads to conclusions.
+<h2>Conclusions & Next Steps</h2>
+<p>
+We have measured the cross-correlation signal between filaments (from SDSS) and compton-$y$/CMB lensing maps (from <i>Planck</i>).
+While we haven't properly estimated a significance of the detection, a non-null signal is seen in the LOWZ and CMASS cases, as also corroborated by the simple null test we performed on the $y$ maps.
+</p>
+<p>
+The analysis presented here  
 <ul>
-    <li> Develop framework to interpret the measurement</li>
+    <li> Develop framework to interpret the measurement, would be cool to estimate some parameter like free electron fraction or the like</li>
     <li> Include compton-$y$ map inhomogenous weighting</li>
-    <li> Null tests</li>
+    <li> In principle it would be interesting to use simulations to validate the analysis and to estimate error bars (although that would likely require a filament detection machinery that we dont have) </li>
 </ul>
+</p>
 
 <hr>
 
