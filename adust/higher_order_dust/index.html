@@ -1,0 +1,372 @@
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+  Higher-order measurements of dust properties (and their impact on $r$)
+  </title>
+
+  <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <!-- MathJax equation numbering -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+
+
+</head>
+
+  <body>
+<script type="text/javascript" src="scripts/pager.js"></script>
+<link rel="stylesheet" type="text/css" href="scripts/pager.css">
+
+  <div class="container content">
+
+      <main>
+        <article class="page">
+  <h1 id='top' class="page-title"> Higher-order measurements of dust properties (and their impact on $r$) </h1>
+  <p class="page-author"> F. Bianchini + D. Beck</p>
+  <p class="page-date"> 28 June 2021. </p>
+
+<h2>Outline and scope</h2>
+
+<p>
+This posting is a follow up of <a href="https://sptlocal.grid.uchicago.edu/~fbianchini/adust"> this one</a>, where we looked into the problem of reconstructing the spatial fluctuations of the Galactic dust amplitude $A_d$ using a quadratic estimator (QE).
+Here, we'll review some theory, extend the treatment to simulations where we also vary the spectral index of the dust spectral energy distribution (SED), and .
+</p>
+<p>
+As mentioned last time, we can model Galactic dust emission at a certain frequency as
+$$
+d_{\nu}(\mathbf{n}) = T_d(\mathbf{n}) S_{\nu}\left(\beta_d(\mathbf{n})\right),
+$$
+where $T_d(\mathbf{n})$ is the dust amplitude template at a reference frequency $\nu_0$ and $S_{\nu}=(\nu/\nu_0)^{\beta_d} B_{\nu}(\Theta_d)/B_{\nu_0}({\Theta_d})$ is the modified black-body dust SED (with $B_{\nu}$ being the Planck function).
+In the simplest form, $T_d(\mathbf{n})$ is a Gaussian realization drawn from a power-law spectrum and $\beta_d$ is fixed to some value, i.e. it doesn't vary across the sky.
+However, we expect both the amplitude (which traces the e.g. dust density variations between different LOS) and the dust SED spectral index to spatially vary. 
+For example, if we Taylor expand the dust emission around the mean $\bar{\beta}_d$, we find
+$$
+d_{\nu}(\mathbf{n}) = T_d(\mathbf{n}) \bar{S}_{\nu} + T_d(\mathbf{n}) \delta\beta_d(\mathbf{n}) \frac{\partial S_{\nu}}{\partial \beta_d}|_{\bar{\beta}_d} + \mathcal O(\delta\beta_d^2) \approx T_d(\mathbf{n}) \bar{S}_{\nu} \left[1 + \delta\beta_d(\mathbf{n})\ln\left(\frac{\nu}{\nu_0}\right)  + \dots \right]
+$$
+where $\delta\beta_d(\mathbf{n}) = \beta_d(\mathbf{n}) - \bar{\beta}_d$ and barred quantities are calculated at the mean value. This is the same "moments expansion" discussed in a number of papers (<a href='https://arxiv.org/pdf/1701.00274.pdf'>Chluba+17</a>, <a href='https://arxiv.org/pdf/1912.09567.pdf'>Mangilli+19</a>, <a href='https://arxiv.org/abs/2011.11575'>Azzoni+21</a>).
+As previously noted, the above expression resembles the case of the screening by patchy-$\tau$ where we have that the unperturbed field (CMB there, dust here) is modulated by another field ($\tau$ there, variations of $\beta$ or the dust density here).
+In particular, we can combine this case with the one studied in the previous posting where the dust amplitude was also modulated ($T_d(\mathbf{n}) \approx \bar{T}_d(\mathbf{n})\left[ 1 + \frac{\delta A_d(\mathbf{n})}{2}\right] $) to get
+$$
+d_{\nu}(\mathbf{n}) \approx \bar{T}_d(\mathbf{n}) \bar{S}_{\nu} \left[1 + \delta\beta_d(\mathbf{n})\ln\left(\frac{\nu}{\nu_0}\right) + \frac{1}{2}\delta A_d(\mathbf{n}) + \left(\frac{1}{2} \delta\beta_d(\mathbf{n})\ln\left(\frac{\nu}{\nu_0}\right)\delta A_d(\mathbf{n})\right) + \dots \right]
+$$ 
+
+So we can see that depending on the specific model, we might reconstruct (certain combinations of) the perturbing fields.
+</p>
+
+<p>
+    One of main goals of this analysis is to understand the impact of higher-order measurements of dust on constraints on $r$. 
+    For example, we would like to check whether we can mitigate biases on $r$ deriving from simplistic assumptions about dust properties (as done in methods like the <i>moments expansion</i> mentioned above) without degrading the sensitivity. 
+</p>
+
+<hr>
+
+<h2>Dust simulations and mock observations</h2>
+<p>
+
+</p>
+<p>
+    We generate four sets of $N_{\rm sims}=300$ realizations of Galactic dust, each one implementing a different dust prescription:
+
+    <dl>
+        <dt>Gaussian dust</dt>
+        <dd>Gaussian sims @ 353 GHz using $A_d=4.25\mu$K$^2$, $\alpha_d=-0.4$, and $E$-to-$B$=2 (we scale these maps to
+        other freqs using the formalism outlined in the Appendix of this <a href='https://arxiv.org/pdf/2008.12619.pdf'>CMB-S4
+            paper</a>)</dd>
+
+        <dt>Amplitude modulated Gaussian dust</dt>
+        <dd>Gaussian sims from the point above that have been modulated using a <i>fixed</i> template map loosely
+        constructed following the scheme sketched <a
+            href="https://cmb-s4.uchicago.edu/wiki/index.php/Amplitude_modulated_Gaussian_dust_sims">here</a> (the
+        modulation map basically contains the dust amplitude at $\ell=80$ of power-law fits to the BB spectra in 400 sq
+        deg circular patches taken from Planck's <code>NPIPE</code> 353 GHz map)</dd>
+
+        <dt>Varying spectral index Gassian dust</dt>
+        <dd> Gaussian dust sims where the spectral index in every pixel comes from the estimate $\beta_d(\mathbf{n})$ from the <i>Planck</i> data using the <code>Commander</code> component separation code</dd>
+
+        <dt>Amplitude modulated Gaussian dust withh varying spectral index</dt>
+        <dd> A suite of sims that combine the models from the previous two points, i.e. we vary both the dust amplitude in each pixel, as well as the dust spectral index.</dd>
+
+    </dl>
+
+</p>
+
+<img src="plots/mod_maps.png" alt="Perturbing fields">
+
+<p>
+    We analyze these dust maps in two scenarios:
+    <dl>
+        <dt>Ideal case</dt>
+        <dd>no beam or noise is applied to the maps</dd>
+    
+        <dt>Realistic case</dt>
+        <dd>we apply a Gaussian beam and add homogeneous white noise. For 150 GHz (the freq we
+        consider here) the numbers are $\theta_{\rm FWHM}=20$ arcmin and $\Delta_T=\Delta_P/\sqrt{2}=5\mu$K-arcmin</dd>
+    
+    </dl>
+In all cases we apply both the B3 and Keck masks (separately of course).
+</p>
+
+<figure>
+    <img alt="Maps pager" id="maps_pager" src="#" />
+    <figcaption>
+        Plots of the different dust simulations (showing here #rlz=0) and masks used in the analysis.
+    </figcaption>
+    <script type="text/javascript">
+        pager.link("#maps_pager",
+            {
+                'Frequency |freq01': ['150'],
+                'Stokes parameter|stoke01': ['T', 'Q', 'U', 'mask_keck', 'mask_B3'],
+                'Dust type|dusttype01': ['Gaussian dust sims|gauss', 'Amp mod gauss|ampmod', 'Gaussian dust varbeta sims|gauss_varbeta', 'Amp mod gauss varbeta|ampmod_varbeta'],
+                'Sim type|simtype01': ['Ideal sims|ideal', 'Beam+noise|beamnoise',],
+            },
+            function (params) {
+                return 'plots/maps_' + params['freq01'] + '/' + params['stoke01'] + '_' + params['dusttype01'] + '_' + params['simtype01'] + '.png';
+            });
+        pager.setparams({
+            'freq01': '150',
+            'stoke01': 'T',
+            'dusttype01': 'gauss',
+            'simtype01': 'ideal',
+        });
+    </script>
+</figure>
+
+
+<hr>
+
+
+<h2>Quadratic Estimator reconstruction params</h2>
+
+    <p>
+    Some of the QE param choices we adopt to analyze the simulations
+    <ul>
+        <li>$\ell_{\rm min, CMB} = 100$ minimum CMB input multipole</li>
+        <li>$\ell_{\rm max, CMB} = 1024$ maximum CMB input multipole</li>
+        <li>$N_{\rm side} = 512$ healpix map resolution</li>
+        <li>N0 bias is estimated from <i>Gaussian</i> sims</li>
+    </ul>
+    </p>
+
+    Of course, the auto-spectrum of the QE estimate in the first is expected to be consistent with zero for the simple
+    Gaussian sims while that should not be the case for the amplitude modulated ones.
+
+<hr>
+
+<h2> Modulation QE maps and spectra</h2>
+
+    <p>
+    We reconstruct the spatial fluctuations of the dust amplitude <a href="https://github.com/carronj/plancklens/"><code>plancklens</code></a> that implements the modulation QE in the curved-sky framework.
+    We use 60 maps to estimate the mean-field bias. Note that in the amplitude modulated case we use the mean-field estimated from the simple gaussian case.  
+    In all cases we remove the $N0$ bias estimated from <i>gaussian</i> sims. 
+    </p>
+
+    <figure>
+        <img alt="QE pager" id="qe_pager" src="#" />
+        <figcaption>
+            Plots of the raw QE estimate, the mean-field debiased one, and the mean-field itself (showing here #rlz=150).
+        </figcaption>
+        <script type="text/javascript">
+            pager.link("#qe_pager",
+                {
+                    'Frequency |freqqe': ['150'],
+                    'Map Type |maptypeqe': ['Raw (single-rlz)|qe','Mean-field debiased (single-rlz) |qe_mf', 'Mean-field debiased (averaged over rlz)|qe_mf_avg', 'Mean-field|mf', 'Modulation map|modmap'],
+                    'Estimator |estqe': ['T', 'P', 'MV',],
+                    'Mask |maskqe': ['B3','Keck'],
+                    'Dust type|dusttypeqe': ['Gaussian dust sims|gauss', 'Amp mod gauss|ampmod', 'Gaussian dust varbeta sims|gauss_varbeta', 'Amp mod gauss varbeta|ampmod_varbeta'],
+                    'Sim type|simtypeqe': ['Ideal sims|ideal', 'Beam+noise|beamnoise',],
+                    'Proj|projqe': ['Curved-sky|full', 'Flat-sky|flat',],
+                },
+                function (params) {
+                    return 'plots/maps_' + params['freqqe'] + '/' + params['maptypeqe'] + '_' + params['estqe'] + '_' + params['maskqe'] + '_' + params['simtypeqe'] + '_' + params['dusttypeqe'] + '_' + params['projqe'] + '.png';
+                });
+            pager.setparams({
+                'freqqe': '150',
+                'maptypeqe': 'qe',
+                'estqe': 'MV',
+                'maskqe': 'B3',
+                'dusttypeqe': 'gauss',
+                'simtypeqe': 'ideal',
+                'projqe': 'flat',
+            });
+        </script>
+    </figure>
+
+    <figure>
+    <img alt="1d pager" id="oned_pager" src="#" />
+    <figcaption>
+    N0 debiased power spectra. Note that these spectra have been averaged over 240 sims, therefore the statistical uncertainties are divided by $\sqrt{N_{\rm sims}}$, they're not per single rlz.
+    Note that the N1 bias term which is expected to be present in the varying $A_d$/$\beta_d$ cases has <b>not</b> been subtracted.
+    </figcaption>
+        <script type="text/javascript">
+            pager.link("#oned_pager",
+                {
+                    'Dust type|dusttype02': ['Gaussian dust sims|gauss', 'Amp mod gauss|ampmod', 'Gaussian dust varbeta sims|gauss_varbeta', 'Amp mod gauss varbeta|ampmod_varbeta'],
+                    'Sim type|simtype02': ['Ideal sims|ideal', 'Beam+noise|beamnoise',],
+                    'Frequency |freq02': ['150'],
+                    'Mask |mask02': ['B3','Keck'],
+                    'Estimator |est02': ['T', 'P', 'MV'],
+                    'Bins |bins02': ['agr2', 'linear'],
+                    'N0 |n002': ['mc',],
+                    'Axes |ax02': ['lin', 'log']
+                },
+                function(params) {
+                   return 'plots/autos/cldada_' + params['est02'] + '_' + params['freq02'] + '_' + params['mask02'] + '_'+ params['simtype02'] + '_' + params['dusttype02'] + '_' + params['bins02'] + '_' + params['n002'] + '_' + params['ax02'] + '.png';
+
+                });
+                pager.setparams({
+                    'dusttype02': 'gauss',
+                    'simtype02': 'ideal',
+                    'freq02': '150',
+                    'mask02':'B3',
+                    'bins02':'agr2',
+                    'est02':'MV',
+                    'n002': 'mc',
+                    'ax02': 'lin',
+                });
+    </script>
+    </figure>
+
+<hr>
+
+<h2> Cross-power spectra between reconstructed and input maps</h2>
+
+<p>
+Here we show 
+</p>
+
+<figure>
+    <img alt="cross input pager" id="cross_input_pager" src="#" />
+    <figcaption>
+        sdf
+    </figcaption>
+    <script type="text/javascript">
+        pager.link("#cross_input_pager",
+            {
+                'Dust type|dusttype07': ['Gaussian dust sims|gauss', 'Amp mod gauss|ampmod', 'Gaussian dust varbeta sims|gauss_varbeta', 'Amp mod gauss varbeta|ampmod_varbeta'],
+                'Sim type|simtype07': ['Ideal sims|ideal', 'Beam+noise|beamnoise',],
+                'Frequency |freq07': ['150'],
+                'Mask |mask07': ['B3', 'Keck'],
+                'Estimator |est07': ['T', 'P', 'MV'],
+                'Plot type |ptype07': ['cl|cl', 'cl ratio|clratio']
+            },
+            function (params) {
+                return 'plots/cross_input/clcross_' + params['est07'] + '_' + params['freq07'] + '_' + params['mask07'] + '_' + params['simtype07'] + '_' + params['dusttype07'] + '_'+params['ptype07']+'.png';
+
+            });
+        pager.setparams({
+            'dusttype07': 'gauss',
+            'simtype07': 'ideal',
+            'freq07': '150',
+            'mask07': 'B3',
+            'est07': 'MV',
+            'ptype07': 'clratio',
+        });
+    </script>
+</figure>
+
+<hr>
+
+
+
+<h2> Bandpower correlation matrices </h2>
+
+<figure>
+    <img alt="n0 corr pager" id="n0_corr_pager" src="#" />
+    <figcaption>
+        Correlation matrices.
+    </figcaption>
+    <script type="text/javascript">
+        pager.link("#n0_corr_pager",
+            {
+                'Dust type|dusttype03': ['Gaussian dust sims|gauss', 'Amp mod gauss|ampmod', 'Gaussian dust varbeta sims|gauss_varbeta', 'Amp mod gauss varbeta|ampmod_varbeta'],
+                'Sim type|simtype03': ['Ideal sims|ideal', 'Beam+noise|beamnoise',],
+                'Frequency |freq03': ['150'],
+                'Mask |mask03': ['B3', 'Keck'],
+                'Estimator |est03': ['T', 'P', 'MV'],
+                'Debiasing |covtype': ['N0|mcn0','RDN0|nhl'],
+                'Bins |bins03': ['agr2', 'linear'],
+                
+            },
+            function (params) {
+                return 'plots/corrs/corr_' + params['covtype'] + '_' + params['est03'] + '_' + params['freq03'] + '_' + params['mask03'] + '_' + params['simtype03'] + '_' + params['dusttype03'] + '_' + params['bins03'] + '.png';
+            });
+        pager.setparams({
+            'dusttype': 'gauss',
+            'simtype': 'ideal',
+            'freq03': '150',
+            'mask03': 'B3',
+            'est03': 'MV',
+            'bins03': 'agr2',
+            'covtype':'mcn0',
+        });
+    </script>
+</figure>
+
+<hr>
+
+<h2> N0 pagers </h2>
+
+    <figure>
+    <img alt="n0 pager" id="n0_pager" src="#" />
+    <figcaption>
+    Comparison between the realization-dependent/independent N0 bias estimates.
+    </figcaption>
+    <script type="text/javascript">
+        pager.link("#n0_pager",
+            {
+                'Dust type|dusttype04': ['Gaussian dust sims|gauss', 'Amp mod gauss|ampmod', 'Gaussian dust varbeta sims|gauss_varbeta', 'Amp mod gauss varbeta|ampmod_varbeta'],
+                'Sim type|simtype04': ['Ideal sims|ideal', 'Beam+noise|beamnoise',],
+                'Frequency |freq04': ['150'],
+                'Mask |mask04': ['B3', 'Keck'],
+                'Estimator |est04': ['T', 'P', 'MV'],
+                'N0 type |n0type': ['RDN0|rdn0', 'N0|mcn0'],
+                'Bins |bins04': ['agr2', 'linear'],
+            },
+            function (params) {
+                return 'plots/'+params['n0type'] + '/' + params['n0type'] + '_' + params['est04'] + '_' + params['freq04'] + '_' + params['mask04'] + '_' + params['simtype04'] + '_' + params['dusttype04'] + '_' + params['bins04'] + '.png';
+            });
+        pager.setparams({
+            'dusttype04': 'gauss',
+            'simtype04': 'ideal',
+            'freq04': '150',
+            'mask04': 'B3',
+            'bins04': 'agr2',
+            'est04': 'MV',
+            'n0type': 'rdn0',
+        });
+    </script>
+    </figure>
+
+<hr>
+
+<h2>Conclusions</h2>
+
+    In this posting we have extended the investigation of the higher-order dust properties to sims that include the effect of a varying dust spectral index. 
+    
+    Some possible next steps are:
+    <ul>
+        <li>(double check that no mistakes were made in cross-correlating the recovered $\beta_d$ fluctuation map with the input one)</li>
+        <li>using other dust models, like the one from Vansyngel</li>
+        <li>including information from 4pt function in multi-freq frameworks (like the moment expansion) to see whether we can mitigate biases on $r$ without degrading the sensitivity</li>
+    </ul>
+
+<hr>
+
+</article>
+</main>
+</div>
+<script type="text/javascript">
+    plupdate();
+</script>
+</body>
+</html>
